@@ -1,0 +1,295 @@
+\documentclass[times,]{simauth}
+\usepackage{moreverb}
+\usepackage[colorlinks,bookmarksopen,bookmarksnumbered,citecolor=red,urlcolor=red]{hyperref}
+\usepackage[numbers, sort&compress]{natbib}
+\def\volumeyear{2017}
+
+\begin{document}
+
+\runninghead{Uthor \emph{et al}.}
+
+\title{A demonstration of the \LaTeX class file for Statistics in Medicine with
+Rmarkdown}
+\author{A. Uthor\affilnum{a,b}, O. Tro\affilnum{b} and O. Vriga\affilnum{c}}
+\address{\affilnum{a} Department of Incredible Research, University A\\\affilnum{b} Department of Applied Things, University B\\\affilnum{c} Very Important Stuff Committee, Institute C\\}
+\corraddr{\href{mailto:some@academic.email.org}{\nolinkurl{some@academic.email.org}}}
+
+\begin{abstract}
+This paper describes the use of the  aTeX \texttt{simauth.cls} class
+file for setting papers for Statistics in Medicine using Rmarkdown.
+\end{abstract}
+
+\keywords{Class file; \LaTeX; Statist. Med.; Rmarkdown;}
+
+\maketitle
+
+\section{Introduction}\label{introduction}
+
+Many authors submitting to research journals use \LaTeX to prepare their
+papers. This paper describes the \texttt{simauth.cls} class file which
+can be used to convert articles produced with other \LaTeX class files
+into the correct form for publication in \emph{Statistics in Medicine}.
+
+The \texttt{simauth.cls} class file preserves much of the standard
+\LaTeX interface so that any document which was produced using the
+standard \LaTeX \texttt{article} style can easily be converted to work
+with the \texttt{simauth} style. However, the width of text and typesize
+will vary from that of \texttt{article.cls}; therefore, \emph{line
+breaks will change} and it is likely that displayed mathematics and
+tabular material will need re-setting.
+
+In the following sections we describe how to lay out your code to use
+\texttt{simauth.cls} to reproduce the typographical look of
+\emph{Statistics in Medicine}. However, this paper is not a guide to
+using \LaTeX and we would refer you to any of the many books available
+(see, for example, \citep{R1, R2, R3}).
+
+\section{The Three Golden Rules}\label{the-three-golden-rules}
+
+Before we proceed, we would like to stress \emph{three golden rules}
+that need to be followed to enable the most efficient use of your code
+at the typesetting stage:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  keep your own macros to an absolute minimum;
+\item
+  as \texttt{TeX} is designed to make sensible spacing decisions by
+  itself, do \emph{not} use explicit horizontal or vertical spacing
+  commands, except in a few accepted (mostly mathematical) situations,
+  such as \texttt{\textbackslash{},} before a
+  differential\textasciitilde{}d, or \texttt{\textbackslash{}quad} to
+  separate an equation from its qualifier;
+\item
+  follow the \emph{Statistics in Medicine} reference style.
+\end{enumerate}
+
+\section{Getting Started}\label{getting-started}
+
+The \texttt{simauth} class file should run on any standard
+\LaTeX installation. If any of the fonts, class files or packages it
+requires are missing from your installation, they can be found on the
+\emph{TeX Collection} DVDs or from CTAN.
+
+Details on Rmarkdown can be found online
+\href{here}{http://rmarkdown.rstudio.com/}.
+
+\emph{Statistics in Medicine} is published using Times fonts and this is
+achieved by using the \texttt{times} option as
+\texttt{\textbackslash{}documentclass{[}times{]}\{simauth\}}. Times
+fonts are also used for mathematics. This is achieved by adding the
+\LaTeX package \texttt{mathtime}. Being \texttt{mathtime} not available
+on \TeX Live installations, the default template does not include it. If
+you need/want to re-enable it, add the option \texttt{keep\_tex:\ TRUE}
+to the YAML header as follows and edit the resulting \texttt{.tex} file
+manually.
+
+\begin{verbatim}
+output:
+  rticles::sim_article:
+    keep_tex: TRUE
+\end{verbatim}
+
+If for any reason you have a problem using Times you can easily resort
+to Computer Modern fonts by removing the \texttt{times} option.
+
+\section{The Article Header
+Information}\label{the-article-header-information}
+
+Configure the YAML header including the following elements:
+
+\begin{itemize}
+\item
+  \texttt{title}: Title
+\item
+  \texttt{author}: Author(s) information, as a string, see below
+\item
+  \texttt{address}: List containing \texttt{address} and \texttt{num}
+  for defining \texttt{author} affiliations
+\item
+  \texttt{corraddr}: Corresponding author address
+\item
+  \texttt{authabbr}: Short author list for header
+\item
+  \texttt{date}: Date of submission
+\item
+  \texttt{year}: Year of submission
+\item
+  \texttt{abstract}: Limited to 250 words
+\item
+  \texttt{keywords}: Up to 6 keywords
+\item
+  \texttt{bibliography}: Bibtex \texttt{.bib} file
+\end{itemize}
+
+\subsection{Author information}\label{author-information}
+
+In order to obtain better results, author(s) information should be
+provided as a string with \LaTeX elements:
+
+\begin{verbatim}
+author: "A.U. Thor\\affilnum{a,b}, O. Tro\\affilnum{b} and O. Vriga\\affilnum{c}"
+\end{verbatim}
+
+\subsection{Remarks}\label{remarks}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  In \texttt{authabbr} use \emph{et al.} if there are three or more
+  authors.
+\item
+  Note the use of \texttt{affilnum} and \texttt{num} to link names and
+  addresses. The author for correspondence can be marked via a custom
+  \texttt{address} entry and \texttt{corraddr} is used to give that
+  author's address, which will be printed as a footnote, prefaced by
+  \emph{Correspondence to:}.
+\item
+  For submitting a double-spaced manuscript, add \texttt{doublespace} as
+  an option to a \texttt{classoption} line in the YAML header:
+  \texttt{classoption:\ doublespace}.
+\item
+  Use \texttt{\textbackslash{}cgs} for giving details of financial
+  sponsors. These details will be printed as a footnote, with
+  \emph{Contract/grant sponsor:} inserted in the appropriate places.
+  This has to be implemented using \LaTeX, and not Rmarkdown.
+\item
+  The abstract should be capable of standing by itself, in the absence
+  of the body of the article and of the bibliography. Therefore, it must
+  not contain any reference citations.
+\item
+  Keywords are separated by semicolons.
+\end{enumerate}
+
+\section{The Body of the Article}\label{the-body-of-the-article}
+
+\subsection{Mathematics}\label{mathematics}
+
+\texttt{simauth.cls} makes the full functionality of \texttt{AmS/TeX}
+available. We encourage the use of the \texttt{align}, \texttt{gather}
+and \texttt{multline} environments for displayed mathematics.
+
+Use mathematics in Rmarkdown as usual.
+
+\subsection{Figures and Tables}\label{figures-and-tables}
+
+\texttt{simauth.cls} uses the \texttt{graphicx} package for handling
+figures.
+
+Figures are supported from R code too:
+
+\begin{verbatim}
+x = rnorm(10)
+y = rnorm(10)
+plot(x, y)
+\end{verbatim}
+
+\begin{figure}
+\centering
+\includegraphics{StatsMedExample_files/figure-latex/plot_ref-1.pdf}
+\caption{Fancy Caption\label{fig:plot}}
+\end{figure}
+
+\ldots{}and can be referenced: \ref{fig:plot}. It is a quirky hack at
+the moment, see \href{here}{https://github.com/yihui/knitr/issues/323}.
+
+Analogously, use Rmarkdown to produce tables as usual:
+
+\begin{verbatim}
+library(xtable)
+xtable(head(cars), caption = "A table", label = "tab:table")
+\end{verbatim}
+
+\% latex table generated in R 3.4.3 by xtable 1.8-2 package \% Tue Mar
+06 09:34:36 2018
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{rrr}
+  \hline
+ & speed & dist \\ 
+  \hline
+1 & 4.00 & 2.00 \\ 
+  2 & 4.00 & 10.00 \\ 
+  3 & 7.00 & 4.00 \\ 
+  4 & 7.00 & 22.00 \\ 
+  5 & 8.00 & 16.00 \\ 
+  6 & 9.00 & 10.00 \\ 
+   \hline
+\end{tabular}
+\caption{A table} 
+\label{tab:table}
+\end{table}
+
+Referenced via \ref{tab:table}.
+
+\subsection{Cross-referencing}\label{cross-referencing}
+
+The use of the Rmarkdown equivalent of the \LaTeX cross-reference system
+for figures, tables, equations, etc., is encouraged (using
+\texttt{{[}@\textless{}name\textgreater{}{]}}, equivalent of
+\texttt{\textbackslash{}ref\{\textless{}name\textgreater{}\}} and
+\texttt{\textbackslash{}label\{\textless{}name\textgreater{}\}}). That
+works well for citations in Rmarkdown, not so well for figures and
+tables. In that case, it is possible to revert to standard
+\LaTeX syntax.
+
+Example: \citep{pepe2003statistical, zou2005regularization}.
+
+\subsection{Acknowledgements}\label{acknowledgements}
+
+An Acknowledgements section is started with \texttt{\textbackslash{}ack}
+or \texttt{\textbackslash{}acks} for \emph{Acknowledgement} or
+\emph{Acknowledgements}, respectively. It must be placed just before the
+References. Define the content of the acknowledgment section in the YAML
+header.
+
+\subsection{Bibliography}\label{bibliography}
+
+Link a \texttt{.bib} document via the YAML header, and bibliography will
+be printed at the very end (as usual). Remember to include a
+\texttt{\#Bibliography} section.
+
+The default bibliography style is provided by Wiley as in
+\texttt{wileyj.bst}. It is possible to provide a custom style by
+providing a \texttt{.csl}/\texttt{.bst} in the
+\texttt{bibliographystyle} field of the YAML header.
+
+\subsection{Double Spacing}\label{double-spacing}
+
+If you need to double space your document for submission please use the
+\texttt{doublespace} option in the header.
+
+\section{Copyright Statement}\label{copyright-statement}
+
+Please be aware that the use of this \LaTeX class file is governed by
+the following conditions.
+
+\subsection{Copyright}\label{copyright}
+
+Copyright 2010 John Wiley \& Sons, Ltd, The Atrium, Southern Gate,
+Chichester, West Sussex, PO19 8SQ, UK. All rights reserved.
+
+\subsection{Rules of Use}\label{rules-of-use}
+
+This class file is made available for use by authors who wish to prepare
+an article for publication in \emph{Statistics in Medicine} published by
+John Wiley \& Sons, Ltd. The user may not exploit any part of the class
+file commercially.
+
+This class file is provided on an \emph{as is} basis, without warranties
+of any kind, either express or implied, including but not limited to
+warranties of title, or implied warranties of merchantablility or
+fitness for a particular purpose. There will be no duty on the
+author{[}s{]} of the software or John Wiley \& Sons, Ltd to correct any
+errors or defects in the software. Any statutory rights you may have
+remain unaffected by your acceptance of these rules of use.
+
+\acks We thank \href{https://stackoverflow.com/}{Stack Overflow} for the
+invaluable support to our research.
+
+\bibliographystyle{wileyj}
+\bibliography{bibfile.bib}
+
+\end{document}
